@@ -1,0 +1,17 @@
+--Day 1: Which product/s has been ordered the most (in terms of quantity)?
+
+D1 = 
+VAR order_quantities_by_product = SUMMARIZE(Order_Details, Products[ProductName], "sum quantity", SUM(Order_Details[Quantity])) --summarizes the total quantity ordered for each product
+
+VAR top_selling_product = TOPN(1, order_quantities_by_product, [sum quantity]) --selects the top-selling product based on the total quantity
+
+RETURN 
+CALCULATE(SELECTEDVALUE(Products[ProductName]), top_selling_product) --selects the name of the top-selling product
+
+
+--Day 2: 
+
+
+--Day 3: 
+
+....
