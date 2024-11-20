@@ -9,8 +9,23 @@ RETURN
 CALCULATE(SELECTEDVALUE(Products[ProductName]), top_selling_product) --selects the name of the top-selling product
 
 
---Day 2: 
+--Day 2: Which product/s have the highest average order size?
 
+D2 = 
+--summarize the data to calculate the average order size for each product
+VAR avg_order_size_per_product = SUMMARIZE(
+			Products,
+			Products[ProductID],
+			Products[ProductName],
+			"avg_order_size", AVERAGE(Order_Details[Quantity])
+		) 
+
+--get the top product with the highest average order size
+VAR top_product = TOPN(1, avg_order_size_per_product, [avg_order_size], DESC)
+
+RETURN
+--concatenate and return the product names from the top products
+CONCATENATEX (top_product, Products[ProductName], ", ", Products[ProductName], ASC)
 
 --Day 3: 
 
