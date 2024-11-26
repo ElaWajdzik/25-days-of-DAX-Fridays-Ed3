@@ -103,4 +103,21 @@ RETURN
 		), 
 	"0%")
 
---Day 7:
+D06 modal = 
+FORMAT(
+    DIVIDE(
+        SUMX(
+            FILTER(Products, Products[Discontinued] = true),
+            [Total sales after discount]
+        ),
+        [Total sales after discount]
+    ),
+    "0%"
+)
+
+--Day 7: How many high-value orders were placed n 1997?
+
+
+--Day 8
+--Day 9
+--Day 10
