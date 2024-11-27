@@ -117,7 +117,51 @@ FORMAT(
 
 --Day 7: How many high-value orders were placed n 1997?
 
+D07 = 
+VAR order_table_97 =
+FILTER(
+    SUMMARIZE(	
+			Order_Details,
+			Order_Details[OrderID],
+			'Calendar'[Year],
+			"total_sale",
+			SUM(Order_Details[TotalPriceAfterDiscount])
+		),
+        'Calendar'[Year] = 1997)
 
---Day 8
+VAR avg_order_sale =
+DIVIDE(
+	SUM(Order_Details[TotalPriceAfterDiscount]),
+	DISTINCTCOUNT(Orders[OrderID])
+)
+
+RETURN 
+COUNTROWS(
+	FILTER(
+		order_table_97,[total_sale] > avg_order_sale)
+	)
+
+
+D07 model = 
+VAR order_table_97 =
+FILTER(
+    SUMMARIZE(
+        Orders, 
+        Orders[OrderID], 'Calendar'[Year], 
+        "revenue", [Total sales after discount]
+    ),
+    'Calendar'[Year] = 1997)
+
+VAR avg_order_revenue_97 =
+AVERAGEX(order_table_97, [revenue])
+
+RETURN
+COUNTROWS(
+    FILTER(order_table_97, [revenue] > avg_order_revenue_97)
+)
+
+
+
+--Day 8: Number of orders delivered on time
 --Day 9
 --Day 10
