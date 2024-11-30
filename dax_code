@@ -163,5 +163,70 @@ COUNTROWS(
 
 
 --Day 8: Number of orders delivered on time
---Day 9
---Day 10
+
+D08 = 
+COUNTROWS(
+	FILTER(Orders, Orders[RequiredDate] - Orders[ShippedDate] >= 0)
+)
+
+--dwa
+
+D08 modal = 
+COUNTROWS(
+    FILTER(
+        SUMMARIZE(
+            FILTER(
+			    Orders, 
+			    NOT(
+			    	ISBLANK(Orders[ShippedDate])
+			    )
+		    ),
+            Orders[OrderID],
+            Orders[ShippedDate],
+            Orders[RequiredDate],
+            "on time",
+            DATEDIFF(Orders[ShippedDate], Orders[RequiredDate], DAY)
+        ),
+        [on time] = 0
+    )
+)
+
+--Day 9: Single month with highest sales
+
+D09 = 
+CALCULATE(
+    SELECTEDVALUE('Calendar'[Month Name]),
+    TOPN(
+        1, 
+        SUMMARIZE(
+            Orders, 
+            'Calendar'[Year], 'Calendar'[Month Name], 
+            "total_sales", SUM(Order_Details[TotalPriceAfterDiscount])
+        ), 
+        [total_sales], DESC
+    )
+)
+
+
+--Day 10: Bast sales day for queso cabrales
+
+D10 = 
+CALCULATE(
+    SELECTEDVALUE('Calendar'[Day Name]),
+    TOPN(
+	    1, 
+	    FILTER(
+		    SUMMARIZE(
+			    Order_Details, Products[ProductName], 'Calendar'[Day Name], 
+			    "total_sale", SUM(Order_Details[TotalPriceAfterDiscount])
+		    ), 
+		    Products[ProductName] = "Queso Cabrales"
+	    ), 
+	    [total_sale]
+    )
+)
+
+--Day 11
+--Day 12
+--Day 13
+--Day 14
